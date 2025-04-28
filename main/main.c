@@ -124,7 +124,7 @@ void mpu6050_task(void *p) {
 
         adc_t adc;
         adc.eixo = 0;
-        adc.valor = euler.angle.yaw * -1;
+        adc.valor = euler.angle.pitch ;
         xQueueSend(xQueueADC, &adc, 0);
 
         adc.eixo = 1;
