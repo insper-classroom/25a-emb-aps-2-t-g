@@ -26,7 +26,8 @@ const int I2C_SDA_GPIO = 4;
 const int I2C_SCL_GPIO = 5;
 const int PIN_BTN_RESET = 16;
 const int PIN_BTN_CLICK = 19;
-const int PIN_BTN_MUTE = 18;
+const int PIN_MACRO = 10;
+const int PIN_MUTE = 22;
 
 void btn_callback(uint gpio, uint32_t events) {
     adc_t adc;
@@ -35,7 +36,9 @@ void btn_callback(uint gpio, uint32_t events) {
             adc.eixo = 2;
         } else if (gpio == PIN_BTN_RESET){
             adc.eixo = -1;
-        } else if (gpio == PIN_BTN_MUTE){
+        } else if (gpio == PIN_MUTE){
+            adc.eixo = 6;
+        } else if (gpio==PIN_MACRO){
             adc.eixo = 5;
         }
     } else {
@@ -163,13 +166,18 @@ int main() {
     gpio_set_dir(PIN_BTN_RESET, GPIO_IN);
     gpio_pull_up(PIN_BTN_RESET);
 
-    gpio_init(PIN_BTN_MUTE);
-    gpio_set_dir(PIN_BTN_MUTE, GPIO_IN);
-    gpio_pull_up(PIN_BTN_MUTE);
+    gpio_init(PIN_MUTE);
+    gpio_set_dir(PIN_MUTE, GPIO_IN);
+    gpio_pull_up(PIN_MUTE);
+
+    gpio_init(PIN_MACRO);
+    gpio_set_dir(PIN_MACRO, GPIO_IN);
+    gpio_pull_up(PIN_MACRO);
 
     gpio_set_irq_enabled_with_callback(PIN_BTN_CLICK, GPIO_IRQ_EDGE_FALL | GPIO_IRQ_EDGE_RISE, true, &btn_callback);
-    gpio_set_irq_enabled_with_callback(PIN_BTN_MUTE, GPIO_IRQ_EDGE_FALL, true, &btn_callback);
+    gpio_set_irq_enabled_with_callback(PIN_MUTE, GPIO_IRQ_EDGE_FALL, true, &btn_callback);
     gpio_set_irq_enabled_with_callback(PIN_BTN_RESET, GPIO_IRQ_EDGE_FALL, true, &btn_callback);
+    gpio_set_irq_enabled_with_callback(PIN_MACRO, GPIO_IRQ_EDGE_FALL, true, &btn_callback);
 
     xTaskCreate(mpu6050_task, "mpu6050_Task 1", 8192, NULL, 1, NULL);
     xTaskCreate(uart_task, "uart task", 4095, NULL, 1, NULL);

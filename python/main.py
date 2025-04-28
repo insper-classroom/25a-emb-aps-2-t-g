@@ -23,6 +23,10 @@ def btn(value):
     elif value == 5:
         pyautogui.moveTo(900, 600)
         pyautogui.dragTo(1100, 400, duration=0.2, button='left')
+        pyautogui.moveTo(1100, 500)
+        pyautogui.dragTo(900, 700, duration=0.2, button='left')
+    elif value == 6:
+        pyautogui.press('volumemute')
 
 def controle(ser):
     """
